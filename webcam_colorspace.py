@@ -3,18 +3,19 @@ import cv2 as cv
 import numpy as np
 from tools.cv_tools import grid, draw_boxes
 
+cv.setUseOptimized(True)
+
 sample_mode = True
 
-def __dummy(var):
-	pass
 if len(sys.argv) == 1:
 	cv.namedWindow('slides')
-	cv.createTrackbar('hmin', 'slides',   0, 179, __dummy)
-	cv.createTrackbar('hmax', 'slides', 179, 179, __dummy)
-	cv.createTrackbar('smin', 'slides',   0, 255, __dummy)
-	cv.createTrackbar('smax', 'slides', 255, 255, __dummy)
-	cv.createTrackbar('vmin', 'slides',   0, 255, __dummy)
-	cv.createTrackbar('vmax', 'slides', 255, 255, __dummy)
+	cv.createTrackbar('hmin', 'slides',   0, 179, lambda x: x)
+	cv.createTrackbar('hmax', 'slides', 179, 179, lambda x: x)
+	cv.createTrackbar('smin', 'slides',   0, 255, lambda x: x)
+	cv.createTrackbar('smax', 'slides', 255, 255, lambda x: x)
+	cv.createTrackbar('vmin', 'slides',   0, 255, lambda x: x)
+	cv.createTrackbar('vmax', 'slides', 255, 255, lambda x: x)
+
 elif len(sys.argv) == 2:
 	try:
 		with open(sys.argv[1], 'r') as f:
@@ -44,12 +45,12 @@ while True:
 		])
 
 	rec, frame = cam.read()
-	frame_blur = cv.GaussianBlur(frame, (9, 9), 150)			# BLUR SMOOTHES THE COLORSPACE
+	frame_blur = cv.GaussianBlur(frame, (9, 9), 150)				# BLUR SMOOTHES THE COLORSPACE
 	frame_hsv = cv.cvtColor(frame_blur, cv.COLOR_BGR2HSV)
 	frame_mask = cv.inRange(frame_hsv, lower, upper)
 	frame_cut = cv.bitwise_and(frame, frame, mask=frame_mask)
 	frame_gray = cv.cvtColor(frame_cut, cv.COLOR_BGR2GRAY)
-	frame_edges = cv.Canny(frame_gray, 50, 50)					# CAN ALSO BE A COLOR FRAME LESS IS BETTER
+	frame_edges = cv.Canny(frame_gray, 100, 100)					# CAN ALSO BE A COLOR FRAME LESS IS BETTER
 	frame_output = draw_boxes(frame_edges, frame.copy())
 
 	frame_grid = grid(frame, (2,3), [frame, frame_output, frame_hsv, frame_cut, frame_mask, frame_edges])

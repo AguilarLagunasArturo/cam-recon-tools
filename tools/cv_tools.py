@@ -21,7 +21,7 @@ def grid(base, dimentions, images, scale=0.5):
 	return np.vstack( [np.hstack(row[:]) for row in grid] )
 
 def draw_boxes(edges, output, min_area=20, scale=0.2):
-	_, contours, _ = cv.findContours(edges, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)	# <- RESEARCH
+	contours, _ = cv.findContours(edges, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)	# <- RESEARCH
 	for c in contours:
 		area = cv.contourArea(c)
 		if area >= min_area:
