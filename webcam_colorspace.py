@@ -31,7 +31,9 @@ elif len(sys.argv) == 2:
 else:
 	raise Exception('Wrong number of arguments')
 	exit()
+
 cam = cv.VideoCapture(0)
+
 canny_settings = [144, 57]
 while True:
 	if sample_mode:
@@ -51,6 +53,10 @@ while True:
 		]
 
 	rec, frame = cam.read()
+
+	if not rec:
+		raise Exception('Cam is not recording')
+
 	frame_blur = cv.GaussianBlur(frame, (9, 9), 150)				# BLUR SMOOTHES THE COLORSPACE
 	frame_hsv = cv.cvtColor(frame_blur, cv.COLOR_BGR2HSV)
 	frame_mask = cv.inRange(frame_hsv, lower, upper)
