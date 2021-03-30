@@ -15,6 +15,8 @@ if len(sys.argv) == 1:
 	cv.createTrackbar('smax', 'slides', 255, 255, lambda x: x)
 	cv.createTrackbar('vmin', 'slides',   0, 255, lambda x: x)
 	cv.createTrackbar('vmax', 'slides', 255, 255, lambda x: x)
+	cv.createTrackbar('canny1', 'slides', 50, 500, lambda x: x)
+	cv.createTrackbar('canny2', 'slides', 50, 500, lambda x: x)
 
 elif len(sys.argv) == 2:
 	try:
@@ -30,7 +32,7 @@ else:
 	raise Exception('Wrong number of arguments')
 	exit()
 cam = cv.VideoCapture(0)
-
+canny_settings = [144, 57]
 while True:
 	if sample_mode:
 		lower = np.array([
@@ -43,15 +45,31 @@ while True:
 			cv.getTrackbarPos('smax', 'slides'),
 			cv.getTrackbarPos('vmax', 'slides')
 		])
+		canny_settings = [
+			cv.getTrackbarPos('canny1', 'slides'),
+			cv.getTrackbarPos('canny2', 'slides')
+		]
 
 	rec, frame = cam.read()
 	frame_blur = cv.GaussianBlur(frame, (9, 9), 150)				# BLUR SMOOTHES THE COLORSPACE
 	frame_hsv = cv.cvtColor(frame_blur, cv.COLOR_BGR2HSV)
 	frame_mask = cv.inRange(frame_hsv, lower, upper)
 	frame_cut = cv.bitwise_and(frame, frame, mask=frame_mask)
-	frame_gray = cv.cvtColor(frame_cut, cv.COLOR_BGR2GRAY)
-	frame_edges = cv.Canny(frame_gray, 100, 100)					# CAN ALSO BE A COLOR FRAME LESS IS BETTER
-	frame_output = draw_boxes(frame_edges, frame.copy())
+	#frame_gray = cv.cvtColor(frame_cut, cv.COLOR_BGR2GRAY)
+	frame_edges = cv.Canny(frame_mask, canny_settings[0], canny_settings[1])					# CAN ALSO BE A COLOR/MASK FRAME LESS IS BETTER
+	frame_output = draw_boxes(frame_edges, frame.copy(), min_area=500)
+	cv.line(
+		frame_output,
+		(0, int(frame.shape[0]/2)),
+		(frame.shape[1], int(frame.shape[0]/2)),
+		(0, 255, 0), 2
+	)
+	cv.line(
+		frame_output,
+		(int(frame.shape[1]/2), 0),
+		(int(frame.shape[1]/2), frame.shape[0] ),
+		(0, 255, 0), 2
+	)
 
 	frame_grid = grid(frame, (2,3), [frame, frame_output, frame_hsv, frame_cut, frame_mask, frame_edges])
 	cv.imshow('grid', frame_grid)

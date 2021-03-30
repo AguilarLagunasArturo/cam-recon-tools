@@ -25,9 +25,16 @@ def draw_boxes(edges, output, min_area=20, scale=0.2):
 	for c in contours:
 		area = cv.contourArea(c)
 		if area >= min_area:
-			cv.drawContours(output, c, -1, (255, 255, 255), 2)						# <- RESEARCH
+			#cv.drawContours(output, c, -1, (255, 255, 255), 2)						# <- RESEARCH
 			perimeter = cv.arcLength(c, True)
 			points = cv.approxPolyDP(c, scale * perimeter, True)
 			x, y, w, h = cv.boundingRect(points)
-			cv.rectangle(output, (x, y), (x + w, y + h), (130, 250, 255), 2)
+			xc, yc = (x + int(w/2), y + int(h/2))
+			cv.circle( output, (xc, yc) , 1, (130, 250, 255), 2 )
+			cv.rectangle( output, (x, y), (x + w, y + h), (255, 250, 255), 2 )
+			cv.line( output, (xc, yc), (xc + int( output.shape[1]/2 - xc ), yc), (130, 250, 255), 1 )
+			cv.line( output, (xc, yc), (xc, yc + int( output.shape[0]/2 - yc )), (130, 250, 255), 1 )
 	return output
+
+def get_box_center():
+	pass
