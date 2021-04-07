@@ -20,21 +20,28 @@ def grid(base, dimentions, images, scale=0.5):
 	# 4. STACK IMAGES
 	return np.vstack( [np.hstack(row[:]) for row in grid] )
 
-def draw_boxes(edges, output, min_area=20, scale=0.2):
-	contours, _ = cv.findContours(edges, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)	# <- RESEARCH
-	for c in contours:
-		area = cv.contourArea(c)
-		if area >= min_area:
-			#cv.drawContours(output, c, -1, (255, 255, 255), 2)						# <- RESEARCH
-			perimeter = cv.arcLength(c, True)
-			points = cv.approxPolyDP(c, scale * perimeter, True)
-			x, y, w, h = cv.boundingRect(points)
-			xc, yc = (x + int(w/2), y + int(h/2))
-			cv.circle( output, (xc, yc) , 1, (130, 250, 255), 2 )
-			cv.rectangle( output, (x, y), (x + w, y + h), (255, 250, 255), 2 )
-			cv.line( output, (xc, yc), (xc + int( output.shape[1]/2 - xc ), yc), (130, 250, 255), 1 )
-			cv.line( output, (xc, yc), (xc, yc + int( output.shape[0]/2 - yc )), (130, 250, 255), 1 )
-	return output
+def drawOffset(im, boxes):
+	for box in boxes:
+		x, y, w, h = box
+		xc, yc = (x + int(w/2), y + int(h/2))
+		cv.circle( im, (xc, yc) , 1, (130, 250, 255), 2 )
+		cv.rectangle( im, (x, y), (x + w, y + h), (255, 250, 255), 2 )
+		cv.line( im, (xc, yc), (xc + int( im.shape[1]/2 - xc ), yc), (130, 250, 255), 1 )
+		cv.line( im, (xc, yc), (xc, yc + int( im.shape[0]/2 - yc )), (130, 250, 255), 1 )
+
+		cv.line(
+			im,
+			(0, int(im.shape[0]/2)),
+			(im.shape[1], int(im.shape[0]/2)),
+			(0, 255, 0), 2
+		)
+		cv.line(
+			im,
+			(int(im.shape[1]/2), 0),
+			(int(im.shape[1]/2), im.shape[0] ),
+			(0, 255, 0), 2
+		)
+	return im
 
 def get_box_center():
 	pass
