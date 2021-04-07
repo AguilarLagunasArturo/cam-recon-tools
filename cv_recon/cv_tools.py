@@ -20,7 +20,30 @@ def grid(base, dimentions, images, scale=0.5):
 	# 4. STACK IMAGES
 	return np.vstack( [np.hstack(row[:]) for row in grid] )
 
-def drawOffsets(im, boxes):
+def getBoxesOffset(im, boxes):
+	im_w = im.shape[1]
+	im_h = im.shape[0]
+	offsets = []
+
+	for box in boxes:
+		x, y, w, h = box
+		xc, yc = (x + int(w/2), y + int(h/2))
+
+		x_off = 2*xc/im.shape[1] - 1
+		y_off = 1 - 2*yc/im.shape[0]
+
+		offsets.append( (x_off, y_off) )
+
+	return offsets
+
+def drawBoxes(im, boxes):
+	for box in boxes:
+		x, y, w, h = box
+		xc, yc = (x + int(w/2), y + int(h/2))
+		cv.rectangle( im, (x, y), (x + w, y + h), (255, 250, 255), 2 )
+	return im
+
+def drawBoxesPos(im, boxes):
 	cv.line(
 		im,
 		(0, int(im.shape[0]/2)),
@@ -36,8 +59,7 @@ def drawOffsets(im, boxes):
 		x, y, w, h = box
 		xc, yc = (x + int(w/2), y + int(h/2))
 		cv.circle( im, (xc, yc) , 1, (130, 250, 255), 2 )
-		cv.rectangle( im, (x, y), (x + w, y + h), (255, 250, 255), 2 )
-		cv.line( im, (xc, yc), (xc + int( im.shape[1]/2 - xc ), yc), (130, 250, 255), 1 )
-		cv.line( im, (xc, yc), (xc, yc + int( im.shape[0]/2 - yc )), (130, 250, 255), 1 )
+		cv.line( im, (xc, yc), (int( im.shape[1]/2), yc), (130, 250, 255), 2 )
+		cv.line( im, (xc, yc), (xc, int( im.shape[0]/2)), (130, 250, 255), 2 )
 
 	return im

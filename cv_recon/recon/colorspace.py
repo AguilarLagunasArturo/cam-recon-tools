@@ -1,24 +1,24 @@
 import cv2 as cv
 import numpy as np
-# cv.setUseOptimized(True)
 
 class Colorspace:
 	def __init__(self, hsv_settings = None):
-		self.hsv_settings = hsv_settings
-
-		if self.hsv_settings is not None:
-			Colorspace.loadSettings(self, self.hsv_settings)
-		else:
+		if hsv_settings is None:
 			self.lower = np.int32( [0, 0, 0] )
 			self.upper = np.int32( [179, 255, 255] )
-
+		elif type(hsv_settings) is list and np.int32(hsv_settings).shape == (2,3):
+			self.lower = np.int32( [hsv_settings[0]] )
+			self.upper = np.int32( [hsv_settings[1]] )
+		else:
+			Colorspace.loadSettings(self, hsv_settings)
 		self.im_mask = None
 		self.im_cut = None
 		self.im_edges = None
+		self.im_contours = None
 
-	def loadSettings(self, hsv_settings):
+	def loadSettings(self, settings):
 		try:
-			with open(hsv_settings, 'r') as f:
+			with open(settings, 'r') as f:
 				lines = f.read().split('\n')
 				self.lower = np.int32( [value for value in lines[0].split(',')] )
 				self.upper = np.int32( [value for value in lines[1].split(',')] )
@@ -29,25 +29,21 @@ class Colorspace:
 	def getBoxes(self, im_base, im_hsv, min_area=20, scale=0.2):
 		self.im_mask = cv.inRange(im_hsv, self.lower, self.upper)
 		self.im_cut = cv.bitwise_and(im_base, im_base, mask=self.im_mask)
-		self.im_edges = cv.Canny(self.im_mask, 100, 100)		# CAN ALSO BE A COLOR/MASK FRAME LESS IS BETTER
-
+		self.im_edges = cv.Canny(self.im_mask, 100, 100)
+		self.im_contours = im_base.copy()
 
 		boxes_within = []
-		contours_within = []
-
-		contours, _ = cv.findContours(self.im_edges, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)		# <- RESEARCH
+		contours, _ = cv.findContours(self.im_edges, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)	# <- RESEARCH
 
 		for c in contours:
 			area = cv.contourArea(c)
 			if area >= min_area:
-				#cv.drawContours(output, c, -1, (255, 255, 255), 2)							# <- RESEARCH
-				perimeter = cv.arcLength(c, True)
-				points = cv.approxPolyDP(c, scale * perimeter, True)
+				perimeter = cv.arcLength( c, True )
+				points = cv.approxPolyDP( c, scale * perimeter, True )
+				boxes_within.append(cv.boundingRect(points))
+				cv.drawContours(self.im_contours, c, -1, (255, 255, 255), 2)					# <- RESEARCH
 
-				boxes_within.append( cv.boundingRect(points) )
-				contours_within.append( c )
-
-		return boxes_within, contours_within
+		return boxes_within
 
 if __name__ == '__main__':
 	import sys
@@ -97,15 +93,16 @@ if __name__ == '__main__':
 		if not rec:
 			raise Exception('Cam is not recording')
 
+		frame_blur = cv.GaussianBlur(frame, (9, 9), 150) 		# smoothes the noise											# BLUR SMOOTHES THE COLORSPACE
+		frame_hsv = cv.cvtColor(frame_blur, cv.COLOR_BGR2HSV)	# convert BGR to HSV
 
-		frame_blur = cv.GaussianBlur(frame, (9, 9), 150)											# BLUR SMOOTHES THE COLORSPACE
-		frame_hsv = cv.cvtColor(frame_blur, cv.COLOR_BGR2HSV)
+		boxes, _ = colorspace.getBoxes(frame, frame_hsv, 150)	# get boxes
+		offsets = cv_tools.getBoxesOffset(frame, boxes)			# get boxes offset from the center of the frame
+		for i, offset in enumerate(offsets):
+			print(i, offset)
 
-		boxes, _ = colorspace.getBoxes(frame, frame_hsv, 150)
-		# get offsets
-
-		# draw boxes
-		frame_out = cv_tools.drawOffsets(frame.copy(), boxes) # remove boxes
+		frame_out = cv_tools.drawBoxes(frame.copy(), boxes)
+		frame_out = cv_tools.drawBoxesPos(frame_out, boxes)
 
 		frame_grid = cv_tools.grid(frame, (2, 3),[
 			frame, frame_hsv, frame_out,
