@@ -1,6 +1,5 @@
 import cv2 as cv
 import numpy as np
-#import cv_tools
 # cv.setUseOptimized(True)
 
 class Colorspace:
@@ -58,8 +57,6 @@ if __name__ == '__main__':
 
 	colorspace = Colorspace()
 	sample_mode =  True
-
-	print(sys.argv)
 
 	if len(sys.argv) == 1:
 		cv.namedWindow('slides')
