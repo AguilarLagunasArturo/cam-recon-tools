@@ -26,7 +26,7 @@ class Colorspace:
 			print(e)
 			exit()
 
-	def getEdgeBoxes(self, im_base, im_hsv, min_area=20, scale=0.2):
+	def getBoxes(self, im_base, im_hsv, min_area=20, scale=0.2):
 		self.im_mask = cv.inRange(im_hsv, self.lower, self.upper)
 		self.im_cut = cv.bitwise_and(im_base, im_base, mask=self.im_mask)
 		self.im_edges = cv.Canny(self.im_mask, 100, 100)		# CAN ALSO BE A COLOR/MASK FRAME LESS IS BETTER
@@ -101,7 +101,7 @@ if __name__ == '__main__':
 		frame_blur = cv.GaussianBlur(frame, (9, 9), 150)											# BLUR SMOOTHES THE COLORSPACE
 		frame_hsv = cv.cvtColor(frame_blur, cv.COLOR_BGR2HSV)
 
-		boxes, _ = colorspace.getEdgeBoxes(frame, frame_hsv)
+		boxes, _ = colorspace.getBoxes(frame, frame_hsv, 150)
 		frame_out = cv_tools.drawOffset(frame.copy(), boxes)
 
 		frame_grid = cv_tools.grid(frame, (2, 3),[

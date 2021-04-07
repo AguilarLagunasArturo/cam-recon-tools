@@ -21,6 +21,17 @@ def grid(base, dimentions, images, scale=0.5):
 	return np.vstack( [np.hstack(row[:]) for row in grid] )
 
 def drawOffset(im, boxes):
+	cv.line(
+		im,
+		(0, int(im.shape[0]/2)),
+		(im.shape[1], int(im.shape[0]/2)),
+		(0, 255, 0), 2)
+	cv.line(
+		im,
+		(int(im.shape[1]/2), 0),
+		(int(im.shape[1]/2), im.shape[0] ),
+		(0, 255, 0), 2)
+
 	for box in boxes:
 		x, y, w, h = box
 		xc, yc = (x + int(w/2), y + int(h/2))
@@ -29,19 +40,4 @@ def drawOffset(im, boxes):
 		cv.line( im, (xc, yc), (xc + int( im.shape[1]/2 - xc ), yc), (130, 250, 255), 1 )
 		cv.line( im, (xc, yc), (xc, yc + int( im.shape[0]/2 - yc )), (130, 250, 255), 1 )
 
-		cv.line(
-			im,
-			(0, int(im.shape[0]/2)),
-			(im.shape[1], int(im.shape[0]/2)),
-			(0, 255, 0), 2
-		)
-		cv.line(
-			im,
-			(int(im.shape[1]/2), 0),
-			(int(im.shape[1]/2), im.shape[0] ),
-			(0, 255, 0), 2
-		)
 	return im
-
-def get_box_center():
-	pass

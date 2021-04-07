@@ -1,1 +1,1 @@
-import cv_recon
+from cv_recon import Colorspace
