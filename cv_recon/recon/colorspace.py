@@ -26,7 +26,7 @@ class Colorspace:
 			print(e)
 			exit()
 
-	def getBoxes(self, im_base, im_hsv, min_area=20, scale=0.2):
+	def getMaskBoxes(self, im_base, im_hsv, min_area=20, scale=0.2):
 		self.im_mask = cv.inRange(im_hsv, self.lower, self.upper)
 		self.im_cut = cv.bitwise_and(im_base, im_base, mask=self.im_mask)
 		self.im_edges = cv.Canny(self.im_mask, 100, 100)
@@ -64,13 +64,9 @@ if __name__ == '__main__':
 		cv.createTrackbar('vmax', 'slides', 255, 255, lambda x: x)
 	elif len(sys.argv) == 2:
 		sample_mode =  False
-		try:
-			colorspace.loadSettings(sys.argv[1])
-		except Exception as e:
-			print(e)
-			exit()
+		colorspace.loadSettings(sys.argv[1])
 	else:
-		raise Exception('Wrong number of arguments')
+		raise Exception('Too many args')
 		exit()
 
 	cam = cv.VideoCapture(0)
@@ -96,7 +92,7 @@ if __name__ == '__main__':
 		frame_blur = cv.GaussianBlur(frame, (9, 9), 150) 		# smoothes the noise											# BLUR SMOOTHES THE COLORSPACE
 		frame_hsv = cv.cvtColor(frame_blur, cv.COLOR_BGR2HSV)	# convert BGR to HSV
 
-		boxes, _ = colorspace.getBoxes(frame, frame_hsv, 150)	# get boxes
+		boxes = colorspace.getMaskBoxes(frame, frame_hsv, 150)	# get boxes
 		offsets = cv_tools.getBoxesOffset(frame, boxes)			# get boxes offset from the center of the frame
 		for i, offset in enumerate(offsets):
 			print(i, offset)
@@ -105,7 +101,7 @@ if __name__ == '__main__':
 		frame_out = cv_tools.drawBoxesPos(frame_out, boxes)
 
 		frame_grid = cv_tools.grid(frame, (2, 3),[
-			frame, frame_hsv, frame_out,
+			frame_hsv, frame_out, colorspace.im_contours,
 			colorspace.im_cut, colorspace.im_mask, colorspace.im_edges
 		])
 
