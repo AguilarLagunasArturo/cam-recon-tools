@@ -102,7 +102,10 @@ if __name__ == '__main__':
 		frame_hsv = cv.cvtColor(frame_blur, cv.COLOR_BGR2HSV)
 
 		boxes, _ = colorspace.getBoxes(frame, frame_hsv, 150)
-		frame_out = cv_tools.drawOffset(frame.copy(), boxes)
+		# get offsets
+
+		# draw boxes
+		frame_out = cv_tools.drawOffsets(frame.copy(), boxes) # remove boxes
 
 		frame_grid = cv_tools.grid(frame, (2, 3),[
 			frame, frame_hsv, frame_out,

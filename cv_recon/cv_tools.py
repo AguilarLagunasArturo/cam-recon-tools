@@ -20,7 +20,7 @@ def grid(base, dimentions, images, scale=0.5):
 	# 4. STACK IMAGES
 	return np.vstack( [np.hstack(row[:]) for row in grid] )
 
-def drawOffset(im, boxes):
+def drawOffsets(im, boxes):
 	cv.line(
 		im,
 		(0, int(im.shape[0]/2)),
