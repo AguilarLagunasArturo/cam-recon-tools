@@ -2,7 +2,7 @@ from cv_recon import Colorspace
 from cv_recon import cv_tools
 import cv2 as cv
 
-colorspace = Colorspace('examples/color_detection/logs/blue-0.log')
+colorspace = Colorspace('examples/color_detection/logs/blue.log')
 cam = cv.VideoCapture(0)
 
 while True:

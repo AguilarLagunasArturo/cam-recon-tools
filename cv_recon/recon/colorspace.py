@@ -101,7 +101,7 @@ if __name__ == '__main__':
 		frame_out = cv_tools.drawBoxesPos(frame_out, boxes)
 
 		frame_grid = cv_tools.grid(frame, (2, 3),[
-			frame_hsv, frame_out, colorspace.im_contours,
+			frame_hsv, colorspace.im_contours, frame_out,
 			colorspace.im_cut, colorspace.im_mask, colorspace.im_edges
 		])
 

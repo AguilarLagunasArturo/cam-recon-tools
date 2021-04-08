@@ -20,6 +20,7 @@ class Features:
 		self.im_target_kp = None
 		self.im_target = None
 
+		self.im_poly = None
 
 	def loadTarget(self, im):
 		self.im_target = im.copy()
@@ -45,7 +46,10 @@ class Features:
 			self.im_target, self.kp2,
 			[matches], None, flags=2)
 
-	def drawPoly(self, im_out, matches, min_matches):
+	def getBoxes(self, matches, min_matches):
+		self.im_poly = self.im_target.copy()
+		boxes = []
+
 		if len(matches) >= min_matches:
 			src_points = np.float32(
 				[self.kp1[m.queryIdx].pt for m in matches]
@@ -59,8 +63,11 @@ class Features:
 			if matrix is None:
 				raise Exception('Cannot find homography in matches')
 
-			des = cv.perspectiveTransform(self.corners, matrix)
-			return cv.polylines(im_out, [np.int32(des)], True, (0, 255, 0), 3)
+			dts = cv.perspectiveTransform(self.corners, matrix)
+			cv.polylines(self.im_poly, [np.int32(dts)], True, (0, 255, 0), 3)
+			boxes.append(cv.boundingRect(np.int32(dts)))
+
+		return boxes
 
 if __name__ == '__main__':
 	import sys
@@ -69,7 +76,7 @@ if __name__ == '__main__':
 	import cv_tools
 
 	if len(sys.argv) == 2:
-		im_source = cv.imread(sys.argv[1], 0)
+		im_source = cv.imread(sys.argv[1])
 		#im_source = cv.resize(im_source, (0, 0), fx=0.5, fy=0.5)
 	elif len(sys.argv) == 1:
 		raise Exception('Must input a path to an image')
@@ -86,23 +93,27 @@ if __name__ == '__main__':
 			break
 
 		rec, frame = cam.read()
-		im_target = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
-		frame_matches = None
-
 		my_feature.loadTarget(frame)
+		frame_matches = None
+		boxes = []
 
 		try:
 			matches = my_feature.getMatches(0.75)
 			frame_matches = my_feature.matchPoints(matches)
-			my_feature.drawPoly(frame, matches, 20)
+			boxes = my_feature.getBoxes(matches, 20)
 		except Exception as e:
-			cv.imshow('image poly', frame)
 			print(e)
 			continue
 
 		if frame_matches is not None:
 			cv.imshow('image matches', frame_matches)
-		cv.imshow('image poly', frame)
+
+		frame_boxes = cv_tools.drawBoxes(frame.copy(), boxes)
+		cv_tools.drawBoxesPos(frame_boxes, boxes)
+		frame_grid = cv_tools.grid(frame, (1, 3), [
+			frame, my_feature.im_poly, frame_boxes
+		])
+		cv.imshow('grid', frame_grid)
 
 	cam.release()
 	cv.destroyAllWindows()
