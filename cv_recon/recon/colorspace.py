@@ -70,6 +70,8 @@ if __name__ == '__main__':
 		exit()
 
 	cam = cv.VideoCapture(0)
+	cam.set(cv.CAP_PROP_FRAME_WIDTH, 320)
+	cam.set(cv.CAP_PROP_FRAME_HEIGHT, 240)
 
 	while True:
 		if sample_mode:

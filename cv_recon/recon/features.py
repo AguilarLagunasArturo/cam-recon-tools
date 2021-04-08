@@ -88,6 +88,9 @@ if __name__ == '__main__':
 	my_feature = Features(im_source, 1000)
 
 	cam = cv.VideoCapture(0)
+	cam.set(cv.CAP_PROP_FRAME_WIDTH, 320)
+	cam.set(cv.CAP_PROP_FRAME_HEIGHT, 240)
+
 	while True:
 		if cv.waitKey(1) & 0xFF == ord('q'):
 			break
