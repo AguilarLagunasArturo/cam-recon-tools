@@ -25,22 +25,23 @@ rawCapture = PiRGBArray(camera, size=res)
 stream = camera.capture_continuous(rawCapture, format="bgr", use_video_port=True)
 
 frame = None
-stop = False
 
 colorspace = Colorspace('examples/color_detection/logs/blue2.log')
+
+cv.namedWindow('slides')
+cv.createTrackbar('hmin', 'slides',   0, 179, lambda x: x)
+cv.createTrackbar('hmax', 'slides', 179, 179, lambda x: x)
+cv.createTrackbar('smin', 'slides',   0, 255, lambda x: x)
+cv.createTrackbar('smax', 'slides', 255, 255, lambda x: x)
+cv.createTrackbar('vmin', 'slides',   0, 255, lambda x: x)
+cv.createTrackbar('vmax', 'slides', 255, 255, lambda x: x)
 
 def update():
 	global stream
 	for f in stream:
 		global frame
-		global stop
 		frame = f.array
 		rawCapture.truncate(0)
-		if stop:
-			stream.close()
-			rawCapture.close()
-			camera.close()
-
 
 t = Thread(target=update, args=())
 t.daemon = True
@@ -51,6 +52,17 @@ sleep(2.0)
 
 # capture frames from the camera
 while True:
+	colorspace.lower = np.array([
+		cv.getTrackbarPos('hmin', 'slides'),
+		cv.getTrackbarPos('smin', 'slides'),
+		cv.getTrackbarPos('vmin', 'slides')
+	])
+	colorspace.upper = np.array([
+		cv.getTrackbarPos('hmax', 'slides'),
+		cv.getTrackbarPos('smax', 'slides'),
+		cv.getTrackbarPos('vmax', 'slides')
+	])
+
 	#cv2.imshow("Frame", frame)
 	frame_blur = cv.GaussianBlur(frame, (9, 9), 150)                # smoothes the noise
 	frame_hsv = cv.cvtColor(frame_blur, cv.COLOR_BGR2HSV)   # convert BGR to HSV
@@ -58,8 +70,8 @@ while True:
 	boxes = colorspace.getMaskBoxes(frame, frame_hsv, 150)  # get boxes (x, y, w, h)
 
 	offsets = cv_tools.getBoxesOffset(frame, boxes)                 # get boxes offset from the center of the frame
-	#for i, offset in enumerate(offsets):
-	#	print(i, offset)                                    # print offset (x_off, y_off)
+	for i, offset in enumerate(offsets):
+		print(i, offset)                                    # print offset (x_off, y_off)
 
 	frame_out = cv_tools.drawBoxes(frame.copy(), boxes)     # draw boxe
 	frame_out = cv_tools.drawBoxesPos(frame_out, boxes)     # draw offsets
@@ -73,5 +85,8 @@ while True:
 	if cv.waitKey(1) & 0xFF == ord("q"):
 		break
 
-stop = True
+stream.close()
+rawCapture.close()
+camera.close()
+
 cv.destroyAllWindows()
