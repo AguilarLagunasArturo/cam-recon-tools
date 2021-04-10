@@ -26,6 +26,35 @@ class Colorspace:
 			print(e)
 			exit()
 
+	def dumpSettings(self, output='last.log'):
+		with open(output, 'w') as f:
+			f.write('{},{},{}\n{},{},{}'.format(
+				self.lower[0], self.lower[1], self.lower[2],
+				self.upper[0], self.upper[1], self.upper[2])
+			)
+
+	@staticmethod
+	def createSliders():
+		cv.namedWindow('sliders')
+		cv.createTrackbar('hmin', 'sliders',   0, 179, lambda x: x)
+		cv.createTrackbar('hmax', 'sliders', 179, 179, lambda x: x)
+		cv.createTrackbar('smin', 'sliders',   0, 255, lambda x: x)
+		cv.createTrackbar('smax', 'sliders', 255, 255, lambda x: x)
+		cv.createTrackbar('vmin', 'sliders',   0, 255, lambda x: x)
+		cv.createTrackbar('vmax', 'sliders', 255, 255, lambda x: x)
+
+	def updateHSV(self):
+		self.lower = np.array([
+			cv.getTrackbarPos('hmin', 'sliders'),
+			cv.getTrackbarPos('smin', 'sliders'),
+			cv.getTrackbarPos('vmin', 'sliders')
+		])
+		self.upper = np.array([
+			cv.getTrackbarPos('hmax', 'sliders'),
+			cv.getTrackbarPos('smax', 'sliders'),
+			cv.getTrackbarPos('vmax', 'sliders')
+		])
+
 	def getMaskBoxes(self, im_base, im_hsv, min_area=20, scale=0.2):
 		self.im_mask = cv.inRange(im_hsv, self.lower, self.upper)
 		self.im_cut = cv.bitwise_and(im_base, im_base, mask=self.im_mask)
@@ -55,13 +84,7 @@ if __name__ == '__main__':
 	sample_mode =  True
 
 	if len(sys.argv) == 1:
-		cv.namedWindow('slides')
-		cv.createTrackbar('hmin', 'slides',   0, 179, lambda x: x)
-		cv.createTrackbar('hmax', 'slides', 179, 179, lambda x: x)
-		cv.createTrackbar('smin', 'slides',   0, 255, lambda x: x)
-		cv.createTrackbar('smax', 'slides', 255, 255, lambda x: x)
-		cv.createTrackbar('vmin', 'slides',   0, 255, lambda x: x)
-		cv.createTrackbar('vmax', 'slides', 255, 255, lambda x: x)
+		colorspace.createSliders()
 	elif len(sys.argv) == 2:
 		sample_mode =  False
 		colorspace.loadSettings(sys.argv[1])
@@ -75,23 +98,13 @@ if __name__ == '__main__':
 
 	while True:
 		if sample_mode:
-			colorspace.lower = np.array([
-				cv.getTrackbarPos('hmin', 'slides'),
-				cv.getTrackbarPos('smin', 'slides'),
-				cv.getTrackbarPos('vmin', 'slides')
-			])
-			colorspace.upper = np.array([
-				cv.getTrackbarPos('hmax', 'slides'),
-				cv.getTrackbarPos('smax', 'slides'),
-				cv.getTrackbarPos('vmax', 'slides')
-			])
+			colorspace.updateHSV()
 
 		rec, frame = cam.read()
-
 		if not rec:
 			raise Exception('Cam is not recording')
 
-		frame_blur = cv.GaussianBlur(frame, (9, 9), 150) 		# smoothes the noise											# BLUR SMOOTHES THE COLORSPACE
+		frame_blur = cv.GaussianBlur(frame, (9, 9), 150) 		# smoothes the noise
 		frame_hsv = cv.cvtColor(frame_blur, cv.COLOR_BGR2HSV)	# convert BGR to HSV
 
 		boxes = colorspace.getMaskBoxes(frame, frame_hsv, 150)	# get boxes
@@ -116,8 +129,4 @@ if __name__ == '__main__':
 	cv.destroyAllWindows()
 
 	if sample_mode:
-		with open('last.log', 'w') as f:
-			f.write('{},{},{}\n{},{},{}'.format(
-				colorspace.lower[0], colorspace.lower[1], colorspace.lower[2],
-				colorspace.upper[0], colorspace.upper[1], colorspace.upper[2])
-			)
+		colorspace.dumpSettings()
