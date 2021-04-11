@@ -1,6 +1,6 @@
 # About
-A computer vision toolkit focused in color recognition and feature matching using OpenCV.  
-Allows you to easily start the picamera in case you're using a Raspberry PI.  
+A computer vision toolkit focused in color detection and feature matching using OpenCV.  
+It allows you to easily start the picamera in case you're using a Raspberry PI.  
 
 # Some of the stuff you can currently do
 - Color recon
@@ -17,8 +17,8 @@ Allows you to easily start the picamera in case you're using a Raspberry PI.
 	- Stack frames in a grid
 
 # Dependencies
-- OpenCV 4.5.2, refer to the installation guide
-- numpy, required by OpenCV
+- OpenCV 4.5.2, refer to the official installation guide
+- numpy, required by OpenCV and used to work with images
 - picamera, required if working with Raspberry PI
 
 # Instalation
