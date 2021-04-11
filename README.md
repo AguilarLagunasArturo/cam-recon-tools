@@ -1,12 +1,55 @@
 # About
-Find HSV colorspace boundaries or load one using OpenCV
+A computer vision toolkit focused in color recognition and feature matching using OpenCV.  
+Allows you to easily start the picamera in case you're using a Raspberry PI.  
 
-# Usage
-- Sample mode allows you to target a color and save it in logs folder
-  - `python3 webcam_colorspace.py`
-- Load a HSV colorspace
-  - `python3 webcam_colorspace.py logs/your-sample.log`
-  
+# Some of the stuff you can currently do
+- Color recon
+	- Find HSV colorspace for a specific color
+	- Find bounding boxes given a HSV colorspace
+- Feature matching
+	- Draw matches
+	- Find bounding boxes
+- Picamera
+	- Easily start the picamera
+- Tools
+	- Draw boxes
+	- Draw boxes' offset from the center of the frame
+	- Stack frames in a grid
+
 # Dependencies
-- `sudo apt install python3-opencv`
-- `pip3 install numpy`
+- OpenCV 4.5.2, refer to the installation guide
+- numpy, required by OpenCV
+- picamera, required if working with Raspberry PI
+
+# Instalation
+- TODO
+
+# Usage (add table w/ descriptions and args)
+- python cv_recon/recon/colorspace.py
+- python cv_recon/recon/features.py <path to reference image>
+- See more examples in examples folder
+
+# Tree
+.
+├── cv_recon
+│   ├── cv_tools.py
+│   ├── __init__.py
+│   ├── picam
+│   │   ├── __init__.py
+│   │   └── picamstream.py
+│   └── recon
+│       ├── colorspace.py
+│       ├── features.py
+│       └── __init__.py
+└── examples
+    ├── color_detection
+    │   └── logs
+    │       ├── blue2.log
+    │       ├── blue.log
+    │       └── red.log
+    └── feature_matching
+        └── im
+            └── src.jpg
+
+# Documentation
+- TODO
