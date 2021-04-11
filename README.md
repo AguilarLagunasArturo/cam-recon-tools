@@ -30,26 +30,26 @@ Allows you to easily start the picamera in case you're using a Raspberry PI.
 - See more examples in examples folder
 
 # Tree
-.
-├── cv_recon
-│   ├── cv_tools.py
-│   ├── __init__.py
-│   ├── picam
-│   │   ├── __init__.py
-│   │   └── picamstream.py
-│   └── recon
-│       ├── colorspace.py
-│       ├── features.py
-│       └── __init__.py
-└── examples
-    ├── color_detection
-    │   └── logs
-    │       ├── blue2.log
-    │       ├── blue.log
-    │       └── red.log
-    └── feature_matching
-        └── im
-            └── src.jpg
+.  
+├── cv_recon  
+│   ├── cv_tools.py  
+│   ├── __init__.py  
+│   ├── picam  
+│   │   ├── __init__.py  
+│   │   └── picamstream.py  
+│   └── recon  
+│       ├── colorspace.py  
+│       ├── features.py  
+│       └── __init__.py  
+└── examples  
+    ├── color_detection  
+    │   └── logs  
+    │       ├── blue2.log  
+    │       ├── blue.log  
+    │       └── red.log  
+    └── feature_matching  
+        └── im  
+            └── src.jpg  
 
 # Documentation
 - TODO
