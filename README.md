@@ -17,17 +17,29 @@ It allows you to easily start the picamera in case you're using a Raspberry PI.
 	- Stack frames in a grid
 
 # Dependencies
-- OpenCV 4.5.2, refer to the official installation guide
-- numpy, required by OpenCV and used to work with images
-- picamera, required if working with Raspberry PI
+| Dependency	| Installation																																|
+| :- 					| :- 																																					|
+| numpy				| `pip install numpy` (required by OpenCV and used to work with images)				|
+| opencv			| Refer to the official [installation guide][1] (tested with version 4.5.2)		|
+| picamera		| Installed by default in Raspberry PI OS (required if working with picamera)	|
 
 # Instalation
-- TODO
+- `pip install cv-recon`
 
-# Usage (add table w/ descriptions and args)
-- python cv_recon/recon/colorspace.py
-- python cv_recon/recon/features.py <path to reference image>
-- See more examples in examples folder
+# Usage
+See examples in the [examples folder][2] or test it directly form source.   From source `cd cv_recon/recon/` once in this folder you can run:  
+
+| Command 																	| Description 																			| Preview |
+| :- 																				| :- 																								| :- 			|
+| `python colorspace.py` 										| Target a single color and generate its settings 	| TODO 		|
+| `python colorspace.py <path to log file>` | Load settings to detect a single color 						| TODO 		|
+| `python features.py <path to an image>` 	| Perform feature detection against the given image | TODO 		|
+
+# Examples
+- TODO
 
 # Documentation
 - TODO
+
+[1]:https://docs.opencv.org/4.5.2/da/df6/tutorial_py_table_of_contents_setup.html
+[2]:https://github.com/AguilarLagunasArturo/cv-recon/tree/main/examples
