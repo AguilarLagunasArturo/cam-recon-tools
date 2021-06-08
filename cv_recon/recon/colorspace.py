@@ -2,7 +2,7 @@ import cv2 as cv
 import numpy as np
 
 class Colorspace:
-	def __init__(self, hsv_settings = None):
+	def __init__(self, hsv_settings=None):
 		if hsv_settings is None:
 			self.lower = np.int32( [0, 0, 0] )
 			self.upper = np.int32( [179, 255, 255] )

@@ -8,6 +8,7 @@ import cv2 as cv
 # initialize the camera
 cam = cv.VideoCapture(0)
 colorspace = Colorspace()
+colorspace.createSliders()
 
 # allow the camera to warmup
 sleep(2.0)
@@ -15,6 +16,7 @@ sleep(2.0)
 # capture frames from the camera
 while True:
 	_, frame = cam.read()
+	colorspace.updateHSV()
 	frame_blur = cv.GaussianBlur(frame, (9, 9), 150)                # smoothes the noise
 	frame_hsv = cv.cvtColor(frame_blur, cv.COLOR_BGR2HSV)   	# convert BGR to HSV
 

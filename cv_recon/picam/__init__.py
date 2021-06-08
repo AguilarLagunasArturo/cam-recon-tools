@@ -1,1 +1,1 @@
-from .picamstream import PiCamStream
+from .picam import PiCam

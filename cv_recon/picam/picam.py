@@ -3,7 +3,7 @@ from picamera import PiCamera
 from threading import Thread
 from time import sleep
 
-class PiCamStream:
+class PiCam:
 	def __init__(self, resolution=(320, 240), fps=32, **kargs):
 		self.camera = PiCamera()
 		self.camera.resolution = resolution
@@ -22,12 +22,12 @@ class PiCamStream:
 		self.current_frame = None
 		self.stop = False
 
-	def start(self):
-		cam_thread = Thread(target=self.update, args=())
-		cam_thread.daemon = True
+	def video_capture(self):
+		cam_thread = Thread(target=self.__update, args=())
+		# cam_thread.daemon = True
 		cam_thread.start()
 
-	def update(self):
+	def __update(self):
 		for frame in self.stream:
 			self.current_frame = frame.array
 			self.rawCapture.truncate(0)
@@ -37,6 +37,6 @@ class PiCamStream:
 				self.camera.close()
 				break
 
-	def close(self):
+	def release(self):
 		self.stop = True
 
