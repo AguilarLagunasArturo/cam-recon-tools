@@ -284,4 +284,4 @@ __Returns:__ image
 [4]:https://github.com/AguilarLagunasArturo/cv-recon/tree/main/examples/color_detection
 [5]:https://github.com/AguilarLagunasArturo/cv-recon/tree/main/examples/feature_matching
 [6]:https://github.com/AguilarLagunasArturo/cv-recon/tree/main/examples/picamera
-[7]:[https://projects.raspberrypi.org/en/projects/getting-started-with-picamera/7]
+[7]:https://projects.raspberrypi.org/en/projects/getting-started-with-picamera/7
