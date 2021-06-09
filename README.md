@@ -18,16 +18,16 @@ A computer vision toolkit focused in color detection and feature matching using 
 # Dependencies
 | Dependency	| Installation																																|
 | :- 					| :- 																																					|
-| python3			| Refer to the official [installation guide][3]                           		|
+| python3			| Refer to the official [website][3]                           		|
 | opencv			| Refer to the official [installation guide][1] (tested with version 4.5.2)		|
-| numpy				| `pip install numpy` (required by OpenCV and used to work with images)				|
-| picamera		| Installed by default in Raspberry PI OS (required if working with picamera)	|
+| numpy				| `pip install numpy`			|
+| picamera		| Installed by default in Raspberry PI OS (required only if working with a picamera)	|
 
 # Instalation
 - `pip install cv-recon`
 
 # Usage
-See examples in the [examples folder][2] or test it directly form source. From source `cd cv_recon/recon/` once in this folder you can run:  
+See examples in the [examples folder][2] or test it directly form source. Change directory `cd cv_recon/recon/` once in this folder you can run:  
 
 | Command 																	| Description 																			| Preview |
 | :- 																				| :- 																								| :- 			|
@@ -45,24 +45,117 @@ colorspace_1 = Colorspace('settings.log')
 colorspace_2 = Colorspace([ [0, 0, 0], [179, 255, 255] ])
 ```
 ### Properties
-| Property | Description | Type |
-| :- | :- | :- |
-| Item One | Item Two | Item Three |
+| Property | Description | Type | Default |
+| :- | :- | :- | :- |
+| lower | Lower HSV boundary | np.array | None |
+| upper | Upper HSV boundary | np.array | None |
+| im_mask | Mask obtained from the HSV boundaries | np.array | None |
+| im_cut | Portions of the frame containing the color boundaries | np.array | None |
+| im_edges | Canny edge detection applied to _im_mask_ | np.array | None |
+| im_contours | Contours of the detected objects drawn on the current frame | np.array | None |
 
 ### Methods
-| Method | Description | Returns |
+##### loadSettings(settings)
+Loads HSV settings from a generated .log file.  
+
+| Args | Description | Default |
 | :- | :- | :- |
-| Item One | Item Two | Item Three |
+| settings | Path to .log file with generated HSV settings | None |
+
+__returns:__ _None_
+
+#### dumpSettings(output='last.log')
+Generates a .log file with the current HSV settings.
+
+| Args | Description | Default |
+| :- | :- | :- |
+| output | Path in witch the file is gonna be written | 'last.log' |
+
+__returns:__ _None_
+
+#### createSliders()
+Creates a window with sliders in order to adjust the HSV settings.  
+__returns:__ _None_
+
+#### updateHSV()
+Updates the current HSV settings with the slider values.  
+__returns:__ _None_
+
+#### getMaskBoxes(im_base, im_hsv, min_area=20, scale=0.1)
+Generates a list containing the bounding box (x, y, w, h) of the object.
+
+| Args | Description | Default |
+| :- | :- | :- |
+| im_base | Base image in bgr format | None |
+| im_hsv | Base image in hsv format | None |
+| min_area | Minimum area to generate the coordinates | 20 |
+| scale | Scale of the bounding box | 0.1 |
+
+__returns:__ bounding_boxes
+
+#### getMaskBoxesArea(im_base, im_hsv, min_area=20, scale=0.1)
+Generates two lists containing the bounding box (x, y, w, h) and the estimated area of each object.
+
+| Args | Description | Default |
+| :- | :- | :- |
+| im_base | Base image in bgr format | None |
+| im_hsv | Base image in hsv format | None |
+| min_area | Minimum area to generate the coordinates | 20 |
+| scale | Scale of the bounding box | 0.1 |
+
+__returns:__ bounding_boxes, areas
 
 ## Class: Features
 
 ``` python
 from cv_recon import Features
+import cv2 as cv
+
+# load source image
+im_source = cv.imread('image.jpg')
+# create Features object (detects 1000 matching features)
+my_feature = Features(im_source, 1000)
 ```
+
 ### Properties
 
+| Property | Description | Type | Default |
+| :- | :- | :- | :- |
+| im_source | Image containing the source image | np.array | _im_source_ |
+| im_source_kp | Image containing the source image keypoints | np.array | _im_source_ keypoints |
+| im_target | Image containing the target image | np.array | None |
+| im_target_kp | Image containing the target image keypoints | np.array | None |
 
 ### Methods
+
+#### loadTarget(im)
+
+| Args | Description | Default |
+| :- | :- | :- |
+| output | Path in witch the file is gonna be written | 'last.log' |
+
+__returns:__ None
+#### getMatches(distance)
+
+| Args | Description | Default |
+| :- | :- | :- |
+| output | Path in witch the file is gonna be written | 'last.log' |
+
+__returns:__ None
+#### matchPoints(matches)
+
+| Args | Description | Default |
+| :- | :- | :- |
+| output | Path in witch the file is gonna be written | 'last.log' |
+
+__returns:__ None
+#### getBoxes(matches, min_matches)
+
+| Args | Description | Default |
+| :- | :- | :- |
+| output | Path in witch the file is gonna be written | 'last.log' |
+
+__returns:__ None
 
 ## Class: PiCam
 
