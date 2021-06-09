@@ -1,5 +1,5 @@
 # import the necessary packages
-from picam import PiCam
+from cv_recon.picam import PiCam
 from time import sleep
 import numpy as np
 import cv2 as cv
@@ -27,8 +27,7 @@ sleep(2.0)
 # capture frames from the camera
 while True:
 	frame = camera.current_frame
-	cv.imshow('grid', frame)                           # show grid
-
+	cv.imshow('grid', frame)
 	if cv.waitKey(1) & 0xFF == ord("q"):
 		break
 

@@ -1,7 +1,7 @@
 import cv2 as cv
 import numpy as np
 
-def grid(base, dimentions, images, scale=0.5):
+def grid(base, dimensions, images, scale=0.5):
 	# 1. SCALE IMAGE
 	base = cv.resize(base, (0, 0), fx=scale, fy=scale)
 	images = [cv.resize(image, (0, 0), fx=scale, fy=scale) for image in images]
@@ -10,13 +10,13 @@ def grid(base, dimentions, images, scale=0.5):
 		if len(image.shape) < 3:
 			images[i] = cv.cvtColor(image, cv.COLOR_GRAY2BGR)
 	# 3. CREATE GRID
-	missing = dimentions[0]*dimentions[1] - len(images)
+	missing = dimensions[0]*dimensions[1] - len(images)
 	if missing < 0:
-		raise Exception('Wrong grid dimentions')
+		raise Exception('Wrong grid dimensions')
 	for i in range(missing):
 		images.append(np.zeros(base.shape, dtype=np.uint8))
 	grid = np.array(images);
-	grid = grid.reshape( (dimentions[0], dimentions[1], base.shape[0], base.shape[1], base.shape[2]) )
+	grid = grid.reshape( (dimensions[0], dimensions[1], base.shape[0], base.shape[1], base.shape[2]) )
 	# 4. STACK IMAGES
 	return np.vstack( [np.hstack(row[:]) for row in grid] )
 

@@ -3,17 +3,6 @@ from picamera import PiCamera
 from threading import Thread
 from time import sleep
 
-'''
-PiCamera settings: https://projects.raspberrypi.org/en/projects/getting-started-with-picamera/7
-	[+] framerate
-	[+] resolution
-	[+] awb_mode
-	[+] image_effect
-	[+] exposure_mode
-	[+] brightness	(0, 100)
-	[+] contrast	(0, 100)
-'''
-
 class PiCam:
 	def __init__(self, resolution=(320, 240), framerate=32, **kargs):
 		self.camera = PiCamera()

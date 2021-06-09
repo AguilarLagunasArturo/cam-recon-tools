@@ -24,7 +24,9 @@ A computer vision toolkit focused in color detection and feature matching using 
 | picamera		| Installed by default in Raspberry PI OS (required only if working with a picamera)	|
 
 # Instalation
-- `pip install cv-recon`
+``` bash
+pip install cv-recon
+```
 
 # Usage
 See examples in the [examples folder][2] or test it directly form source. Change directory `cd cv_recon/recon/` once in this folder you can run:  
@@ -36,7 +38,14 @@ See examples in the [examples folder][2] or test it directly form source. Change
 | `python features.py <path to an image>` 	| Perform feature detection against a given image | TODO 		|
 
 # Documentation
-## Class: Colorspace
+## Class: Colorspace(hsv_settings=None)
+This class allows you to detect a range of colors using HSV boundaries. You can generate this settings or set them directly. See examples [here][4].
+
+| Args | Description | Default |
+| :- | :- | :- |
+| hsv_settings | Path to .log file with generated HSV settings or list containing lower and upper HSV boundaries | None |
+
+### Import example
 ``` python
 from cv_recon import Colorspace
 # load generated settings
@@ -69,7 +78,7 @@ Generates a .log file with the current HSV settings.
 
 | Args | Description | Default |
 | :- | :- | :- |
-| output | Path in witch the file is gonna be written | 'last.log' |
+| output | Path in which the file is gonna be written | 'last.log' |
 
 __returns:__ _None_
 
@@ -82,7 +91,7 @@ Updates the current HSV settings with the slider values.
 __returns:__ _None_
 
 #### `getMaskBoxes(im_base, im_hsv, min_area=20, scale=0.1)`
-Generates a list containing the bounding box (x, y, w, h) of the object.
+Generates a list containing the bounding boxes (x, y, w, h) of the objects.
 
 | Args | Description | Default |
 | :- | :- | :- |
@@ -94,7 +103,7 @@ Generates a list containing the bounding box (x, y, w, h) of the object.
 __returns:__ bounding_boxes
 
 #### `getMaskBoxesArea(im_base, im_hsv, min_area=20, scale=0.1)`
-Generates two lists containing the bounding box (x, y, w, h) and the estimated area of each object.
+Generates two lists containing the bounding boxes (x, y, w, h) and the estimated area of each object.
 
 | Args | Description | Default |
 | :- | :- | :- |
@@ -105,8 +114,15 @@ Generates two lists containing the bounding box (x, y, w, h) and the estimated a
 
 __returns:__ bounding_boxes, areas
 
-## Class: Features
+## Class: Features(im_source=None, features=500)
+This class allows you to easily perform feature matching detection. See examples [here][5].
 
+| Args | Description | Default |
+| :- | :- | :- |
+| im_source | Source image | None |
+| features | Amount of features in _im_source_ | 500 |
+
+### Import example
 ``` python
 from cv_recon import Features
 import cv2 as cv
@@ -118,14 +134,13 @@ my_feature = Features(im_source, 1000)
 ```
 
 ### Properties
-
 | Property | Description | Type | Default |
 | :- | :- | :- | :- |
-| im_source | Image containing the source image | np.array | _im_source_ |
-| im_source_kp | Image containing the source image keypoints | np.array | _im_source_ keypoints |
-| im_target | Image containing the target image | np.array | None |
-| im_target_kp | Image containing the target image keypoints | np.array | None |
-| im_poly | Image containing a polygon around the best match | np.array | None |
+| im_source | Source image (the image you want to detect) | np.array | _im_source_ |
+| im_source_kp | Source image keypoints | np.array | _im_source_ keypoints |
+| im_target | Target image | np.array | None |
+| im_target_kp | Target image keypoints | np.array | None |
+| im_poly | Image containing a polygon around the best matches | np.array | None |
 
 ### Methods
 
@@ -134,7 +149,7 @@ Loads the target image to perform the feature matching detection.
 
 | Args | Description | Default |
 | :- | :- | :- |
-| im | Target image in witch the feature matching is gonna be perform | None |
+| im | Target image in which the feature matching is gonna be perform | None |
 
 __returns:__ None
 
@@ -143,18 +158,18 @@ Generates a list with the good matches found in the target image.
 
 | Args | Description | Default |
 | :- | :- | :- |
-| distance | Threshold witch decides if it is a good match | 0.75 |
+| distance | Threshold which decides if it is a good match | 0.75 |
 
 __returns:__ good_matches
 
 #### `matchPoints(matches)`
-Draws the good matches.
+Returns an image containing the matches between _im_target_ and _im_source_.
 
 | Args | Description | Default |
 | :- | :- | :- |
 | matches | List containing the good matches | None |
 
-__returns:__ image_containing_the_good_matches
+__returns:__ image
 
 #### `getBoxes(matches, min_matches=20)`
 Generates a list containing the bounding box (x, y, w, h) of the object.
@@ -166,8 +181,16 @@ Generates a list containing the bounding box (x, y, w, h) of the object.
 
 __returns:__ bounding_box
 
-## Class: PiCam
+## Class: PiCam(resolution=(320, 240), framerate=32, **kargs)
+This class allows you to easily interact with the picamera. See examples [here][6].
 
+| Args | Description | Default |
+| :- | :- | :- |
+| resolution | Camera resolution | (320, 240) |
+| framerate | Framerate | 32 |
+| **kargs | Assign default picamera settings, see examples [here][7] | None |
+
+### Import example
 ``` python
 from cv_recon.picam import PiCam
 
@@ -184,22 +207,81 @@ camera = PiCam(res, fps)
 | current_frame | Current frame | np.array |
 
 ### Methods
+#### `videoCapture()`
+Creates a thread which updates the property _current_frame_.
+__returns:__ None
+
+#### `release()`
+Stops updating the property _current_frame_.  
+__returns:__ None
+
+#### `effects()`
+Prints the list of image effects.  
+__returns:__ None
+
+#### `exposureModes()`
+Prints the list of exposure modes.  
+__returns:__ None
+
+#### `awbModes()`
+Prints the list of automatic withe balance modes.  
+__returns:__ None
 
 ## Module: cv_tools
+This module allows you generate a grid of images, draw boxes bounding boxes and its offset from the center of the frame.
+
+### Import example
 ``` python
 from cv_recon import cv_tools
 ```
 
-### Properties
-| Property | Description | Type |
-| :- | :- | :- |
-| Item One | Item Two | Item Three |
-
-### Methods
-
-## Module: cv_recon
 ### Functions
+#### `grid(base, dimensions, images, scale=0.5)`
+Generates a _numpy.array_ containing a grid of images with the given dimensions and scale.  
+
+| Args | Description | Default |
+| :- | :- | :- |
+| base | Image with the base dimensions for the rest of the images | None |
+| dimensions | Tupla containing the dimensions of the grid | None |
+| images | List of images not larger than _`dimensions[0] * dimensions[1]`_, each each image must have the same dimensions as _base_ | None |
+| scale | Scale of the output image | 0.5 |
+
+__Returns:__ image
+
+#### `getBoxesOffset(im, boxes)`
+Generates a list containing the offset of each box from the center of the frame.
+
+| Args | Description | Default |
+| :- | :- | :- |
+| im | Image with the size of the frame | None |
+| boxes | List of bounding boxes | None |
+
+__Returns:__ [x_offset, y_offset]
+
+#### `drawBoxes(im, boxes)`
+Draw the bounding boxes over an image.
+
+| Args | Description | Default |
+| :- | :- | :- |
+| im | Image with the size of the frame | None |
+| boxes | List of bounding boxes | None |
+
+__Returns:__ image
+
+#### `drawBoxesPos(im, boxes)`
+Draw the offset from the center of the frame of each bounding box.
+
+| Args | Description | Default |
+| :- | :- | :- |
+| im | Image with the size of the frame | None |
+| boxes | List of bounding boxes | None |
+
+__Returns:__ image
 
 [1]:https://docs.opencv.org/4.5.2/da/df6/tutorial_py_table_of_contents_setup.html
 [2]:https://github.com/AguilarLagunasArturo/cv-recon/tree/main/examples
 [3]:https://www.python.org/downloads/
+[4]:https://github.com/AguilarLagunasArturo/cv-recon/tree/main/examples/color_detection
+[5]:https://github.com/AguilarLagunasArturo/cv-recon/tree/main/examples/feature_matching
+[6]:https://github.com/AguilarLagunasArturo/cv-recon/tree/main/examples/picamera
+[7]:[https://projects.raspberrypi.org/en/projects/getting-started-with-picamera/7]
