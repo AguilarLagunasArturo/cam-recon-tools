@@ -20,12 +20,9 @@ class PiCam:
 		self.camera.framerate = framerate
 		self.camera.resolution = resolution
 
-		self.camera.brightness = 55
-		self.camera.contrast = 10
-
 		self.rawCapture = PiRGBArray(self.camera, size=self.camera.resolution)
 
-		for arg, value in kwargs.items():
+		for arg, value in kargs.items():
 			setattr(self.camera, arg, value)
 
 		self.stream = self.camera.capture_continuous(
