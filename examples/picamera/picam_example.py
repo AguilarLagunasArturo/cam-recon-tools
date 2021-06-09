@@ -13,10 +13,10 @@ fps = 24
 camera = PiCam(res, fps)
 
 camera.effects()
-camera.awb_modes()
-camera.exposure_modes()
+camera.awbModes()
+camera.exposureModes()
 
-camera.video_capture()
+camera.videoCapture()
 colorspace = Colorspace('examples/color_detection/logs/blue2.log')
 
 # allow the camera to warmup

@@ -37,7 +37,7 @@ class PiCam:
 		self.current_frame = None
 		self.stop = False
 
-	def video_capture(self):
+	def videoCapture(self):
 		cam_thread = Thread(target=self.__update, args=(), daemon=True)
 		cam_thread.start()
 
@@ -58,10 +58,10 @@ class PiCam:
 		for e in self.camera.IMAGE_EFFECTS:
 			print(e)
 
-	def exposure_modes(self):
+	def exposureModes(self):
 		for e in self.camera.EXPOSURE_MODES:
 			print(e)
 
-	def awb_modes(self):
+	def awbModes(self):
 		for e in self.camera.AWB_MODES:
 			print(e)
