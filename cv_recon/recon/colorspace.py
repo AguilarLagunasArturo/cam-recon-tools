@@ -55,14 +55,14 @@ class Colorspace:
 			cv.getTrackbarPos('vmax', 'sliders')
 		])
 
-	def getMaskBoxes(self, im_base, im_hsv, min_area=20, scale=0.2):
+	def getMaskBoxes(self, im_base, im_hsv, min_area=20, scale=0.1):
 		self.im_mask = cv.inRange(im_hsv, self.lower, self.upper)
 		self.im_cut = cv.bitwise_and(im_base, im_base, mask=self.im_mask)
 		self.im_edges = cv.Canny(self.im_mask, 100, 100)
 		self.im_contours = im_base.copy()
 
 		boxes_within = []
-		contours, _ = cv.findContours(self.im_edges, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)	# <- RESEARCH
+		contours, _ = cv.findContours(self.im_edges, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)	# <- DO RESEARCH
 
 		for c in contours:
 			area = cv.contourArea(c)
@@ -70,9 +70,30 @@ class Colorspace:
 				perimeter = cv.arcLength( c, True )
 				points = cv.approxPolyDP( c, scale * perimeter, True )
 				boxes_within.append(cv.boundingRect(points))
-				cv.drawContours(self.im_contours, c, -1, (255, 255, 255), 2)					# <- RESEARCH
+				cv.drawContours(self.im_contours, c, -1, (255, 255, 255), 2)					# <- DO RESEARCH
 
 		return boxes_within
+
+	def getMaskBoxesArea(self, im_base, im_hsv, min_area=20, scale=0.1):
+		self.im_mask = cv.inRange(im_hsv, self.lower, self.upper)
+		self.im_cut = cv.bitwise_and(im_base, im_base, mask=self.im_mask)
+		self.im_edges = cv.Canny(self.im_mask, 100, 100)
+		self.im_contours = im_base.copy()
+
+		boxes_within = []
+		area_within = []
+		contours, _ = cv.findContours(self.im_edges, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)	# <- DO RESEARCH
+
+		for c in contours:
+			area = cv.contourArea(c)
+			if area >= min_area:
+				perimeter = cv.arcLength( c, True )
+				points = cv.approxPolyDP( c, scale * perimeter, True )
+				boxes_within.append(cv.boundingRect(points))
+				area_within.append(area)
+				cv.drawContours(self.im_contours, c, -1, (255, 255, 255), 2)					# <- DO RESEARCH
+
+		return boxes_within, area_within
 
 if __name__ == '__main__':
 	import sys
@@ -107,7 +128,8 @@ if __name__ == '__main__':
 		frame_blur = cv.GaussianBlur(frame, (9, 9), 150) 		# smoothes the noise
 		frame_hsv = cv.cvtColor(frame_blur, cv.COLOR_BGR2HSV)	# convert BGR to HSV
 
-		boxes = colorspace.getMaskBoxes(frame, frame_hsv, 150)	# get boxes
+		boxes, areas = colorspace.getMaskBoxesArea(frame, frame_hsv, 200, 0.1)	# get boxes and boxes area
+		# boxes = colorspace.getMaskBoxes(frame, frame_hsv, 200, 0.1)	# get boxes
 		offsets = cv_tools.getBoxesOffset(frame, boxes)			# get boxes offset from the center of the frame
 		for i, offset in enumerate(offsets):
 			print(i, offset)

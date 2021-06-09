@@ -1,5 +1,5 @@
 # import the necessary packages
-from cv_recon import PiCamStream
+from cv_recon.picam import PiCam
 from cv_recon import Colorspace
 from cv_recon import cv_tools
 from time import sleep
@@ -7,11 +7,16 @@ import numpy as np
 import cv2 as cv
 
 res = (320, 240)
-fps = 32
+fps = 24
 
 # initialize the camera
-cam_stream = PiCamStream(res, fps)
-cam_stream.start()
+camera = PiCam(res, fps)
+
+camera.effects()
+camera.awb_modes()
+camera.exposure_modes()
+
+camera.video_capture()
 colorspace = Colorspace('examples/color_detection/logs/blue2.log')
 
 # allow the camera to warmup
@@ -19,7 +24,7 @@ sleep(2.0)
 
 # capture frames from the camera
 while True:
-	frame = cam_stream.current_frame
+	frame = camera.current_frame
 	print(type(frame))
 	frame_blur = cv.GaussianBlur(frame, (9, 9), 150)                # smoothes the noise
 	frame_hsv = cv.cvtColor(frame_blur, cv.COLOR_BGR2HSV)   	# convert BGR to HSV
@@ -42,5 +47,5 @@ while True:
 	if cv.waitKey(1) & 0xFF == ord("q"):
 		break
 
-cam_stream.close()
+camera.release()
 cv.destroyAllWindows()

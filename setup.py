@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
 	name="cv-recon",
-	version="0.0.4",
+	version="0.1.0",
 	author="Arturo Aguilar Lagunas",
 	author_email="aguilar.lagunas.arturo@gmail.com",
 	description="A computer vision toolkit focused in color detection and feature matching using OpenCV. It allows you to easily start the picamera in case you're using a Raspberry PI.",

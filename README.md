@@ -18,32 +18,30 @@ A computer vision toolkit focused in color detection and feature matching using 
 # Dependencies
 | Dependency	| Installation																																|
 | :- 					| :- 																																					|
-| numpy				| `pip install numpy` (required by OpenCV and used to work with images)				|
+| python3			| Refer to the official [installation guide][3]                           		|
 | opencv			| Refer to the official [installation guide][1] (tested with version 4.5.2)		|
+| numpy				| `pip install numpy` (required by OpenCV and used to work with images)				|
 | picamera		| Installed by default in Raspberry PI OS (required if working with picamera)	|
 
 # Instalation
 - `pip install cv-recon`
 
 # Usage
-See examples in the [examples folder][2] or test it directly form source.   From source `cd cv_recon/recon/` once in this folder you can run:  
+See examples in the [examples folder][2] or test it directly form source. From source `cd cv_recon/recon/` once in this folder you can run:  
 
 | Command 																	| Description 																			| Preview |
 | :- 																				| :- 																								| :- 			|
-| `python colorspace.py` 										| Target a single color and generate its settings 	| TODO 		|
+| `python colorspace.py` 										| Generate HSV settings for an specific color 	| TODO 		|
 | `python colorspace.py <path to log file>` | Load settings to detect a single color 						| TODO 		|
-| `python features.py <path to an image>` 	| Perform feature detection against the given image | TODO 		|
-
-# Examples
-- TODO
+| `python features.py <path to an image>` 	| Perform feature detection against a given image | TODO 		|
 
 # Documentation
 ## Class: Colorspace
-
-
 ``` python
 from cv_recon import Colorspace
+# load generated settings
 colorspace_1 = Colorspace('settings.log')
+# or set hsv lower and upper boundaries
 colorspace_2 = Colorspace([ [0, 0, 0], [179, 255, 255] ])
 ```
 ### Properties
@@ -52,6 +50,9 @@ colorspace_2 = Colorspace([ [0, 0, 0], [179, 255, 255] ])
 | Item One | Item Two | Item Three |
 
 ### Methods
+| Method | Description | Returns |
+| :- | :- | :- |
+| Item One | Item Two | Item Three |
 
 ## Class: Features
 
@@ -63,10 +64,10 @@ from cv_recon import Features
 
 ### Methods
 
-## Class: PiCamStream
+## Class: PiCam
 
 ``` python
-from cv_recon.picam import PiCamStream
+from cv_recon.picam import PiCam
 ```
 ### Properties
 | Property | Description | Type |
@@ -92,3 +93,4 @@ from cv_recon import cv_tools
 
 [1]:https://docs.opencv.org/4.5.2/da/df6/tutorial_py_table_of_contents_setup.html
 [2]:https://github.com/AguilarLagunasArturo/cv-recon/tree/main/examples
+[3]:https://www.python.org/downloads/
