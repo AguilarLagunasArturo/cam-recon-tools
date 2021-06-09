@@ -1,5 +1,5 @@
 # About
-A computer vision toolkit focused in color detection and feature matching using OpenCV. It allows you to easily start the picamera in case you're using a Raspberry PI.  
+A computer vision toolkit focused on color detection and feature matching using OpenCV. It allows you to easily start the picamera in case you're using a Raspberry PI.  
 
 # Some of the stuff you can currently do
 - Color recon
