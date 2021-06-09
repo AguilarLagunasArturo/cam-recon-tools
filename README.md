@@ -55,7 +55,7 @@ colorspace_2 = Colorspace([ [0, 0, 0], [179, 255, 255] ])
 | im_contours | Contours of the detected objects drawn on the current frame | np.array | None |
 
 ### Methods
-##### loadSettings(settings)
+#### `loadSettings(settings)`
 Loads HSV settings from a generated .log file.  
 
 | Args | Description | Default |
@@ -64,7 +64,7 @@ Loads HSV settings from a generated .log file.
 
 __returns:__ _None_
 
-#### dumpSettings(output='last.log')
+#### `dumpSettings(output='last.log')`
 Generates a .log file with the current HSV settings.
 
 | Args | Description | Default |
@@ -73,15 +73,15 @@ Generates a .log file with the current HSV settings.
 
 __returns:__ _None_
 
-#### createSliders()
+#### `createSliders()`
 Creates a window with sliders in order to adjust the HSV settings.  
 __returns:__ _None_
 
-#### updateHSV()
+#### `updateHSV()`
 Updates the current HSV settings with the slider values.  
 __returns:__ _None_
 
-#### getMaskBoxes(im_base, im_hsv, min_area=20, scale=0.1)
+#### `getMaskBoxes(im_base, im_hsv, min_area=20, scale=0.1)`
 Generates a list containing the bounding box (x, y, w, h) of the object.
 
 | Args | Description | Default |
@@ -93,7 +93,7 @@ Generates a list containing the bounding box (x, y, w, h) of the object.
 
 __returns:__ bounding_boxes
 
-#### getMaskBoxesArea(im_base, im_hsv, min_area=20, scale=0.1)
+#### `getMaskBoxesArea(im_base, im_hsv, min_area=20, scale=0.1)`
 Generates two lists containing the bounding box (x, y, w, h) and the estimated area of each object.
 
 | Args | Description | Default |
@@ -111,9 +111,9 @@ __returns:__ bounding_boxes, areas
 from cv_recon import Features
 import cv2 as cv
 
-# load source image
+# load source image (the image you want to detect)
 im_source = cv.imread('image.jpg')
-# create Features object (detects 1000 matching features)
+# create Features object (detects 1000 features from the source image)
 my_feature = Features(im_source, 1000)
 ```
 
@@ -125,47 +125,63 @@ my_feature = Features(im_source, 1000)
 | im_source_kp | Image containing the source image keypoints | np.array | _im_source_ keypoints |
 | im_target | Image containing the target image | np.array | None |
 | im_target_kp | Image containing the target image keypoints | np.array | None |
+| im_poly | Image containing a polygon around the best match | np.array | None |
 
 ### Methods
 
-#### loadTarget(im)
+#### `loadTarget(im)`
+Loads the target image to perform the feature matching detection.
 
 | Args | Description | Default |
 | :- | :- | :- |
-| output | Path in witch the file is gonna be written | 'last.log' |
+| im | Target image in witch the feature matching is gonna be perform | None |
 
 __returns:__ None
-#### getMatches(distance)
+
+#### `getMatches(distance=0.75)`
+Generates a list with the good matches found in the target image.
 
 | Args | Description | Default |
 | :- | :- | :- |
-| output | Path in witch the file is gonna be written | 'last.log' |
+| distance | Threshold witch decides if it is a good match | 0.75 |
 
-__returns:__ None
-#### matchPoints(matches)
+__returns:__ good_matches
 
-| Args | Description | Default |
-| :- | :- | :- |
-| output | Path in witch the file is gonna be written | 'last.log' |
-
-__returns:__ None
-#### getBoxes(matches, min_matches)
+#### `matchPoints(matches)`
+Draws the good matches.
 
 | Args | Description | Default |
 | :- | :- | :- |
-| output | Path in witch the file is gonna be written | 'last.log' |
+| matches | List containing the good matches | None |
 
-__returns:__ None
+__returns:__ image_containing_the_good_matches
+
+#### `getBoxes(matches, min_matches=20)`
+Generates a list containing the bounding box (x, y, w, h) of the object.
+
+| Args | Description | Default |
+| :- | :- | :- |
+| matches | Good matches | None |
+| min_matches | Minimum amount of matches to generate the bounding box | 20 |
+
+__returns:__ bounding_box
 
 ## Class: PiCam
 
 ``` python
 from cv_recon.picam import PiCam
+
+# cam settings
+res = (320, 240)
+fps = 24
+
+# initialize the camera
+camera = PiCam(res, fps)
 ```
 ### Properties
 | Property | Description | Type |
 | :- | :- | :- |
-| Item One | Item Two | Item Three |
+| current_frame | Current frame | np.array |
 
 ### Methods
 

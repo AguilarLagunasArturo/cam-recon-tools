@@ -25,7 +25,7 @@ class Features:
 	def loadTarget(self, im):
 		self.im_target = im.copy()
 
-	def getMatches(self, distance):
+	def getMatches(self, distance=0.75):
 		self.kp2, self.des2 = self.orb.detectAndCompute(self.im_target, None)
 		self.im_target_kp = cv.drawKeypoints(self.im_target.copy(), self.kp2, None)
 
@@ -46,7 +46,7 @@ class Features:
 			self.im_target, self.kp2,
 			[matches], None, flags=2)
 
-	def getBoxes(self, matches, min_matches):
+	def getBoxes(self, matches, min_matches=20):
 		self.im_poly = self.im_target.copy()
 		boxes = []
 
