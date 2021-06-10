@@ -1,27 +1,27 @@
 # About
-A computer vision toolkit focused on color detection and feature matching using OpenCV. It allows you to easily start the picamera in case you're using a Raspberry PI.  
+A computer vision toolkit focused on color detection and feature matching using OpenCV. It allows you to easily start the picamera in case you're using a Raspberry PI.
 
 # Some of the stuff you can currently do
-- Color recon
-	- Find HSV colorspace for a specific color
-	- Find bounding boxes given a HSV colorspace
+- Color detection
+	- Detect a range of colors in an image using HSV boundaries.
+	- Find bounding boxes.
 - Feature matching
-	- Draw matches
-	- Find bounding boxes
+	- Draw matches between a source and target image.
+	- Find bounding boxes.
 - Picamera
-	- Easily start the picamera
+	- Easily start the picamera.
 - Tools
-	- Draw boxes
-	- Draw boxes' offset from the center of the frame
-	- Stack frames in a grid
+	- Draw boxes.
+	- Draw boxes' offset from the center of the frame.
+	- Stack frames in a grid.
 
 # Dependencies
-| Dependency	| Installation																																|
-| :- 					| :- 																																					|
-| python3			| Refer to the official [website][3]                           		|
-| opencv			| Refer to the official [installation guide][1] (tested with version 4.5.2)		|
-| numpy				| `pip install numpy`			|
-| picamera		| Installed by default in Raspberry PI OS (required only if working with a picamera)	|
+| Dependency | Installation |
+| :- | :- |
+| python3	| Refer to the official [website][3] |
+| opencv	| Refer to the official [installation guide][1] (tested with version 4.5.2) |
+| numpy	| `pip install numpy` |
+| picamera | Installed by default in Raspberry PI OS (required only if working with a picamera)	|
 
 # Instalation
 ``` bash
@@ -31,11 +31,11 @@ pip install cv-recon
 # Usage
 See examples in the [examples folder][2] or test it directly form source. Change directory `cd cv_recon/recon/` once in this folder you can run:  
 
-| Command 																	| Description 																			| Preview |
-| :- 																				| :- 																								| :- 			|
-| `python colorspace.py` 										| Generate HSV settings for an specific color 	| TODO 		|
-| `python colorspace.py <path to log file>` | Load settings to detect a single color 						| TODO 		|
-| `python features.py <path to an image>` 	| Perform feature detection against a given image | TODO 		|
+| Command | Description | Preview |
+| :- | :- | :- 			|
+| `python colorspace.py` | Generate HSV settings to detect a specific color | ![Colorspace example 1](examples/feature_matching/im/src.jpg) |
+| `python colorspace.py <path to .log file>` | Load HSV settings to detect a specific color | TODO |
+| `python features.py <path to an image>` | Perform feature detection against a given image | TODO |
 
 # Documentation
 ## Class: Colorspace(hsv_settings=None)
@@ -208,11 +208,11 @@ camera = PiCam(res, fps)
 
 ### Methods
 #### `videoCapture()`
-Creates a thread which updates the property _current_frame_.
+Creates a thread which updates the property _current_frame_ .  
 __returns:__ None
 
 #### `release()`
-Stops updating the property _current_frame_.  
+Stops updating the property _current_frame_ .  
 __returns:__ None
 
 #### `effects()`
@@ -243,7 +243,7 @@ Generates a _numpy.array_ containing a grid of images with the given dimensions 
 | :- | :- | :- |
 | base | Image with the base dimensions for the rest of the images | None |
 | dimensions | Tupla containing the dimensions of the grid | None |
-| images | List of images not larger than _`dimensions[0] * dimensions[1]`_, each each image must have the same dimensions as _base_ | None |
+| images | List of images not larger than _`dimensions[0] * dimensions[1]`_, each image must have the same dimensions as _base_ | None |
 | scale | Scale of the output image | 0.5 |
 
 __Returns:__ image
