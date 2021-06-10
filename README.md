@@ -208,11 +208,11 @@ camera = PiCam(res, fps, brightness=55, contrast=10)
 
 ### Methods
 #### `videoCapture()`
-Creates a thread which updates the property _current_frame_ .  
+Creates a thread which updates the property _current_frame_.  
 __returns:__ None
 
 #### `release()`
-Stops updating the property _current_frame_ .  
+Stops updating the property _current_frame_.  
 __returns:__ None
 
 #### `effects()`
