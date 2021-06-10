@@ -23,7 +23,7 @@ A computer vision toolkit focused on color detection and feature matching using 
 | numpy	| `pip install numpy` |
 | picamera | Installed by default in Raspberry PI OS (required only if working with a picamera)	|
 
-# Instalation
+# Installation
 ``` bash
 pip install cv-recon
 ```
@@ -33,17 +33,17 @@ See examples in the [examples folder][2] or test it directly form source. Change
 
 | Command | Description | Preview |
 | :- | :- | :- 			|
-| `python colorspace.py` | Generate HSV settings to detect a specific color | ![Colorspace example 1](examples/feature_matching/im/src.jpg) |
-| `python colorspace.py <path to .log file>` | Load HSV settings to detect a specific color | TODO |
-| `python features.py <path to an image>` | Perform feature detection against a given image | TODO |
+| `python colorspace.py` | Generate HSV settings to detect a specific color | ![Colorspace example 1](preview/colorspace-1.png) |
+| `python colorspace.py <path to .log file>` | Load HSV settings to detect a specific color | ![Colorspace example 2](preview/colorspace-2.png) |
+| `python features.py <path to an image>` | Perform feature detection against a given image | ![Feature matching example](preview/feature-matching.png) |
 
 # Documentation
 ## Class: Colorspace(hsv_settings=None)
-This class allows you to detect a range of colors using HSV boundaries. You can generate this settings or set them directly. See examples [here][4].
+This class allows you to detect a range of colors using HSV boundaries. You can generate the settings or set them directly. See examples [here][4].
 
 | Args | Description | Default |
 | :- | :- | :- |
-| hsv_settings | Path to .log file with generated HSV settings or list containing lower and upper HSV boundaries | None |
+| hsv_settings | Path to .log file containing the HSV settings or list containing lower and upper HSV boundaries | None |
 
 ### Import example
 ``` python
@@ -56,8 +56,8 @@ colorspace_2 = Colorspace([ [0, 0, 0], [179, 255, 255] ])
 ### Properties
 | Property | Description | Type | Default |
 | :- | :- | :- | :- |
-| lower | Lower HSV boundary | np.array | None |
-| upper | Upper HSV boundary | np.array | None |
+| lower | Lower HSV boundary | list | None |
+| upper | Upper HSV boundary | list | None |
 | im_mask | Mask obtained from the HSV boundaries | np.array | None |
 | im_cut | Portions of the frame containing the color boundaries | np.array | None |
 | im_edges | Canny edge detection applied to _im_mask_ | np.array | None |
@@ -87,7 +87,7 @@ Creates a window with sliders in order to adjust the HSV settings.
 __returns:__ _None_
 
 #### `updateHSV()`
-Updates the current HSV settings with the slider values.  
+Updates the current HSV settings with the current slider values.  
 __returns:__ _None_
 
 #### `getMaskBoxes(im_base, im_hsv, min_area=20, scale=0.1)`
@@ -188,7 +188,7 @@ This class allows you to easily interact with the picamera. See examples [here][
 | :- | :- | :- |
 | resolution | Camera resolution | (320, 240) |
 | framerate | Framerate | 32 |
-| **kargs | Assign default picamera settings, see examples [here][7] | None |
+| **kargs | Assign default picamera settings. See a list of the settings [here][7] | None |
 
 ### Import example
 ``` python
@@ -199,7 +199,7 @@ res = (320, 240)
 fps = 24
 
 # initialize the camera
-camera = PiCam(res, fps)
+camera = PiCam(res, fps, brightness=55, contrast=10)
 ```
 ### Properties
 | Property | Description | Type |
@@ -228,7 +228,7 @@ Prints the list of automatic withe balance modes.
 __returns:__ None
 
 ## Module: cv_tools
-This module allows you generate a grid of images, draw boxes bounding boxes and its offset from the center of the frame.
+This module allows you generate a grid of images, draw bounding boxes and its offset from the center of the frame.
 
 ### Import example
 ``` python
@@ -263,7 +263,7 @@ Draw the bounding boxes over an image.
 
 | Args | Description | Default |
 | :- | :- | :- |
-| im | Image with the size of the frame | None |
+| im | Image in which the bounding boxes are going to be drawn | None |
 | boxes | List of bounding boxes | None |
 
 __Returns:__ image
@@ -273,7 +273,7 @@ Draw the offset from the center of the frame of each bounding box.
 
 | Args | Description | Default |
 | :- | :- | :- |
-| im | Image with the size of the frame | None |
+| im | Image in which the offsets are going to be drawn | None |
 | boxes | List of bounding boxes | None |
 
 __Returns:__ image

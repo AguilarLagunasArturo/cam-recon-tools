@@ -140,7 +140,7 @@ if __name__ == '__main__':
 		frame_grid = cv_tools.grid(frame, (2, 3),[
 			frame_hsv, colorspace.im_contours, frame_out,
 			colorspace.im_cut, colorspace.im_mask, colorspace.im_edges
-		])
+		], 0.75)
 
 		cv.imshow('grid', frame_grid)
 
