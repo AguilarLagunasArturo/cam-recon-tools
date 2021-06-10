@@ -33,9 +33,9 @@ See examples in the [examples folder][2] or test it directly form source. Change
 
 | Command | Description | Preview |
 | :- | :- | :- 			|
-| `python colorspace.py` | Generate HSV settings to detect a specific color | ![Colorspace example 1](preview/colorspace-1.png) |
-| `python colorspace.py <path to .log file>` | Load HSV settings to detect a specific color | ![Colorspace example 2](preview/colorspace-2.png) |
-| `python features.py <path to an image>` | Perform feature detection against a given image | ![Feature matching example](preview/feature-matching.png) |
+| `python colorspace.py` | Generates HSV settings to detect a specific color | ![Colorspace example 1](https://raw.githubusercontent.com/AguilarLagunasArturo/cv-recon/main/preview/colorspace-1.png) |
+| `python colorspace.py <path to .log file>` | Loads HSV settings to detect a specific color | ![Colorspace example 2](https://raw.githubusercontent.com/AguilarLagunasArturo/cv-recon/main/preview/colorspace-2.png) |
+| `python features.py <path to an image>` | Performs feature detection against a given image | ![Feature matching example](https://raw.githubusercontent.com/AguilarLagunasArturo/cv-recon/main/preview/feature-matching.png) |
 
 # Documentation
 ## Class: Colorspace(hsv_settings=None)
