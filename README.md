@@ -247,7 +247,7 @@ Generates a _numpy.array_ containing a grid of images with the given dimensions 
 | images | List of images not larger than _`dimensions[0] * dimensions[1]`_, each image must have the same dimensions as _base_ | None |
 | scale | Scale of the output image | 0.5 |
 
-__Returns:__ image
+__returns:__ image
 
 #### `getBoxesOffset(im, boxes)`
 Generates a list containing the offset of each box from the center of the frame.
@@ -257,7 +257,7 @@ Generates a list containing the offset of each box from the center of the frame.
 | im | Image with the size of the frame | None |
 | boxes | List of bounding boxes | None |
 
-__Returns:__ [x_offset, y_offset]
+__returns:__ [x_offset, y_offset]
 
 #### `drawBoxes(im, boxes)`
 Draw the bounding boxes over an image.
@@ -267,7 +267,7 @@ Draw the bounding boxes over an image.
 | im | Image in which the bounding boxes are going to be drawn | None |
 | boxes | List of bounding boxes | None |
 
-__Returns:__ image
+__returns:__ image
 
 #### `drawBoxesPos(im, boxes)`
 Draw the offset from the center of the frame of each bounding box.
@@ -277,7 +277,7 @@ Draw the offset from the center of the frame of each bounding box.
 | im | Image in which the offsets are going to be drawn | None |
 | boxes | List of bounding boxes | None |
 
-__Returns:__ image
+__returns:__ image
 
 [1]:https://docs.opencv.org/4.5.2/da/df6/tutorial_py_table_of_contents_setup.html
 [2]:https://github.com/AguilarLagunasArturo/cv-recon/tree/main/examples
