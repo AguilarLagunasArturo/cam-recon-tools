@@ -38,6 +38,7 @@ See examples in the [examples folder][2] or test it directly form source. Change
 | `python features.py <path to an image>` | Performs feature detection against a given image | ![Feature matching example](https://raw.githubusercontent.com/AguilarLagunasArturo/cv-recon/main/preview/feature-matching.png) |
 
 # Documentation
+
 ## Class: Colorspace(hsv_settings=None)
 This class allows you to detect a range of colors using HSV boundaries. You can generate the settings or set them directly. See examples [here][4].
 
