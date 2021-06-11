@@ -104,7 +104,7 @@ Generates a list containing the bounding boxes (x, y, w, h) of the objects.
 __returns:__ bounding_boxes
 
 #### `getMaskBoxesArea(im_base, im_hsv, min_area=20, scale=0.1)`
-Generates two lists containing the bounding boxes (x, y, w, h) and the estimated area for each object.
+Generates two lists containing the bounding boxes (x, y, w, h) and the estimated area of each object.
 
 | Args | Description | Default |
 | :- | :- | :- |
